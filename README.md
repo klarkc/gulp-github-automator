@@ -18,8 +18,6 @@ require('gulp-gitmagic', {
     test_task: 'test',
     github_token: process.env.GITHUB_TOKEN
 });
-
-gulp.task('default', ['release']);
 ```
 
 ### options
