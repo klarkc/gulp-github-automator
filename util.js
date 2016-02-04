@@ -10,9 +10,9 @@ var version = require("conventional-recommended-bump");
 var $ = module.export;
 
 $.conf = {
-  token: undefined,
+  token: null,
   preset: "angular",
-  testTask: undefined,
+  testTask: null,
   appDir: path.dirname(require.main.filename),
   versionFiles: [
     "package.js",
