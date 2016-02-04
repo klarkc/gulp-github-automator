@@ -9,7 +9,7 @@ The principle is simple: Your master branch is always in sync with your producti
 
 ## Usage
 In your gulpfile.js:
-```
+```javascript
 var gulp = require('gulp');
 
 // Load Tasks
