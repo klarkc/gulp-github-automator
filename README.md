@@ -13,7 +13,7 @@ In your gulpfile.js:
 var gulp = require('gulp');
 
 // Load Tasks
-require('gulp-gitmagic', {
+require('gulp-github-automator', {
     preset: 'angular',
     test_task: 'test',
     github_token: process.env.GITHUB_TOKEN
