@@ -1,0 +1,22 @@
+{
+  "name": "gulp-gitmagic",
+  "version": "0.0.1",
+  "description": "It's a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://klarkc:KlarkC0511@github.com/klarkc/gulp-gitmagic.git"
+  },
+  "keywords": [
+    "gulp"
+  ],
+  "author": "KlarkC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/klarkc/gulp-gitmagic/issues"
+  },
+  "homepage": "https://github.com/klarkc/gulp-gitmagic"
+}
