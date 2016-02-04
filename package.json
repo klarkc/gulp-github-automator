@@ -1,5 +1,5 @@
 {
-  "name": "gulp-gitmagic",
+  "name": "gulp-github-automator",
   "version": "0.0.1",
   "description": "It's a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.",
   "main": "index.js",

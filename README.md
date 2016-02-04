@@ -1,7 +1,7 @@
-# gulp-gitflow
+# gulp-github-automator
 It's a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
 
-The principle is: Your master branch is always in sync with your production environment, and develop branch is used for developing things.
+The principle is simple: Your master branch is always in sync with your production environment, and develop branch is used as base of new features.
 
 ![Git Flow](http://nvie.com/img/git-model@2x.png)
 
