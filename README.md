@@ -27,7 +27,7 @@ gulp.task('default', ['release']);
 #### preset
 Type: `string` Possible values: `'angular', 'atom', 'codemirror', 'ember', 'eslint', 'express', 'jquery', 'jscs', 'jshint'`
 
-Is the pattern of the commits messages, with this you can automate the changelog generation and other tasks. The default one is the [angular preset](https://github.com/ajoslin/conventional-changelog/blob/master/conventions/angular.md).
+Is the pattern of the commits messages, with this you can automate the changelog generation and other tasks. The default one is the [angular preset](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#).
 
 #### test_task
 Type: `string` Default: `undefined`
