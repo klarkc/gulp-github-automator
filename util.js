@@ -82,7 +82,7 @@ $.askDeleteBranch = function (branch, done) {
 };
 
 $.askPushTo = function (local, remote, done) {
-  $.askContinue('Want to push the local ' + branch + ' branch to ' + remote + ' repository?', function () {
+  $.askContinue('Want to push the local ' + local + ' branch to ' + remote + ' repository?', function () {
     git.push(remote, local, {
       args: '-u'
     }, done);
