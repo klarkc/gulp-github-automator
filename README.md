@@ -1,4 +1,14 @@
 # gulp-github-automator
+=
+
+[![David deps][david-image]][david-url]
+[![Codacy][codacy-image]][codacy-url]
+
+[david-image]: https://img.shields.io/david/larkc/gulp-github-automator.svg?style=flat-square
+[david-url]: https://david-dm.org/klarkc/gulp-github-automator
+[codacy-image]: https://img.shields.io/codacy/67950dc659aa4f589efd881190b5a5a0.svg
+[codacy-url]: https://www.codacy.com/app/walker/gulp-github-automator
+
 It"s a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
 
 The principle is simple: Your master branch is always in sync with your production environment, and develop branch is used as base of new features. With this We can automate the changelog file generation and versioning info. New versions of your application are created when needed as well the releases and tags on GitHub repository.
