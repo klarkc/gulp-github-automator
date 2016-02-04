@@ -8,15 +8,15 @@ var path = require("path");
 var fs = require("fs");
 var $ = require("../util.js");
 
-module.exports = function (error, bump_type) {
-    var bump_params = {
+module.exports = function (error, bumpType) {
+    var bumpParams = {
       // Set version type to -t option or version (or if empty, patch)
-      type: argv.t || bump_type || "patch"
+      type: argv.t || bumpType || "patch"
     };
 
     // Set version from command line
     if (argv.v) {
-      bump_params.version = argv.v;
+      bumpParams.version = argv.v;
     }
 
     var files = $.conf.versionFiles.reduce(function(files, file){
@@ -28,6 +28,6 @@ module.exports = function (error, bump_type) {
     }, []);
 
     return gulp.src(files)
-      .pipe(bump(bump_params).on("error", gutil.log))
+      .pipe(bump(bumpParams).on("error", gutil.log))
       .pipe(gulp.dest($.conf.appDir));
 };

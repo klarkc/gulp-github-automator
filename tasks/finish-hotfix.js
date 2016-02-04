@@ -3,7 +3,6 @@
 var argv = require("yargs").argv;
 var runSequence = require("run-sequence");
 var gutil = require("gulp-util");
-var git = require("gulp-git");
 var $ = require("../utils.js");
 
 var mergeIntoRelease = function (done) {
@@ -33,7 +32,7 @@ var pushToDevelop = function (next) {
 var commitChanges = $.commitChangesStream();
 
 module.exports = [[$.conf.testTask], function (done) {
-  var check_error = function (error) {
+  var checkError = function (error) {
     if (error) {
       throw error;
     } else {
@@ -55,7 +54,7 @@ module.exports = [[$.conf.testTask], function (done) {
       pushToDevelop,
       "create-new-tag",
       "github-release",
-      check_error
+      checkError
     );
   } else {
     runSequence(
@@ -68,7 +67,7 @@ module.exports = [[$.conf.testTask], function (done) {
       pushToDevelop,
       "create-new-tag",
       "github-release",
-      check_error
+      checkError
     );
   }
 
