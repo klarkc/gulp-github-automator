@@ -11,7 +11,9 @@
     "url": "https://klarkc:KlarkC0511@github.com/klarkc/gulp-gitmagic.git"
   },
   "keywords": [
-    "gulp"
+    "gulp",
+    "git",
+    "automation"
   ],
   "author": "KlarkC",
   "license": "MIT",
