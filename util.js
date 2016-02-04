@@ -5,7 +5,20 @@ var git = require('gulp-git');
 var fs = require('fs');
 var argv = require('yargs').argv;
 var rl = require('readline');
+var path = require('path');
+var version = require('conventional-recommended-bump');
 var $ = module.export;
+
+$.conf = {
+  token: undefined,
+  preset: 'angular',
+  testTask: undefined,
+  appDir: path.dirname(require.main.filename),
+  versionFiles: [
+    'package.js',
+    'bower.json'
+  ]
+};
 
 $.createTmpBranch = function (done) {
   var name = 'tmp-' + Math.floor(Math.random() * 10000);
@@ -19,7 +32,7 @@ $.createTmpBranch = function (done) {
 $.packageVersion = function () {
   // We parse the json file instead of using require because require caches
   // multiple calls so the version number won't be updated
-  return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
+  return JSON.parse(fs.readFileSync(path.resolve($.conf.appDir, './package.json'), 'utf8')).version;
 };
 
 $.commitChangesStream = function () {
@@ -28,22 +41,42 @@ $.commitChangesStream = function () {
     .pipe(git.commit('[Prerelease] Bumped version number'));
 };
 
-$.mergeInto = function(branch, done) {
+$.mergeInto = function (branch, done) {
   if (!argv.b) {
-        throw new Error('You must set a branch with -b argument');
+    throw new Error('You must set a branch with -b argument');
   }
 
-  git.checkout(branch, function(){
+  git.checkout(branch, function () {
     git.merge(argv.b, {
-        args: '--no-ff'
+      args: '--no-ff'
     }, done);
   });
 };
 
-$.askContinue = function(question, keepGoing){
-  rl.question(question, function(answer){
-    if(answer.match(/[yes|y]/i)){
+$.calculateVersion = function (done) {
+  version({
+    preset: $.conf.preset
+  }, done);
+};
+
+$.askContinue = function (question, keepGoing) {
+  rl.question(question, function (answer) {
+    if (answer.match(/[yes|y]/i)) {
       keepGoing();
     }
+  });
+};
+
+$.askDeleteBranch = function (branch, done) {
+  $.askContinue('Want to delete local and remote ' + branch + ' branch? ', function () {
+    // Delete local release branch
+    git.branch(argv.b, {
+      args: '-d'
+    }, function () {
+      // Delete remote release branch
+      git.push('origin', argv.b, {
+        args: '--delete'
+      }, done);
+    });
   });
 };

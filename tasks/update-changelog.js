@@ -2,15 +2,17 @@
 
 var gulp = require('gulp');
 var changelog = require('gulp-conventional-changelog');
+var path = require('path');
+var $ = require('../util.js');
 
 module.exports = function () {
-    var src = gulp.src('CHANGELOG.md', {
+    var src = gulp.src(path.resolve($.conf.appDir, './CHANGELOG.md'), {
         buffer: false
     });
     return src
         .pipe(changelog({
-            preset: 'angular' // Or to any other commit message convention you use.
+            preset: $.conf.preset
         }))
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest($.conf.appDir));
 };
 

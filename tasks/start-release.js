@@ -23,7 +23,7 @@ module.exports = function (done) {
     runSequence(
       'bump-version',
       renameBranch,
-      'changelog',
+      'update-changelog',
       commitChanges,
       pushToOrigin,
       done
