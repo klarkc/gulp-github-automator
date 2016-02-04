@@ -21,6 +21,7 @@ module.exports = [/*['test'],*/ function (done) {
         }
     };
     runSequence(
+        'checkout-develop',
         'merge-into-develop',
         check_error
     );

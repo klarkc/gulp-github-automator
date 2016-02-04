@@ -4,7 +4,7 @@ var gulp = require('gulp');
 var git = require('gulp-git');
 var fs = require('fs');
 var argv = require('yargs').argv;
-
+var rl = require('readline');
 var $ = module.export;
 
 $.createTmpBranch = function (done) {
@@ -37,5 +37,13 @@ $.mergeInto = function(branch, done) {
     git.merge(argv.b, {
         args: '--no-ff'
     }, done);
+  });
+};
+
+$.askContinue = function(question, keepGoing){
+  rl.question(question, function(answer){
+    if(answer.match(/[yes|y]/i)){
+      keepGoing();
+    }
   });
 };

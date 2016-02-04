@@ -2,7 +2,6 @@
 
 var git = require('gulp-git');
 var argv = require('yargs').argv;
-var version = require('./package-version.js');
 
 module.exports = function (done) {
     if (!argv.r) {
