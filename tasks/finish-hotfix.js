@@ -18,12 +18,6 @@ var mergeIntoDevelop = function (done) {
   $.mergeInto('develop', done);
 };
 
-var renameBranch = function (next) {
-  git.branch('hotfix-' + argv.b, {
-    args: '-m'
-  }, next);
-};
-
 var pushToMaster = function (next) {
   $.askPushTo('master', 'origin', next);
 };

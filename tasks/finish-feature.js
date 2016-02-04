@@ -3,7 +3,6 @@
 var argv = require('yargs').argv;
 var runSequence = require('run-sequence');
 var gutil = require('gulp-util');
-var git = require('gulp-git');
 var $ = require('../util.js');
 
 var mergeIntoDevelop = function (done) {
