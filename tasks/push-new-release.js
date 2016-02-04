@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var releaser = require('conventional-github-releaser');
-var git = require('gulp-git');
-var $ = require('../util.js');
+var releaser = require("conventional-github-releaser");
+var git = require("gulp-git");
+var $ = require("../util.js");
 
 var createAndPush = function(done){
   releaser({
@@ -14,7 +14,7 @@ var createAndPush = function(done){
 };
 
 module.exports = function (done) {
-  git.checkout('master', function(){
+  git.checkout("master", function(){
     createAndPush(done);
   });
 };

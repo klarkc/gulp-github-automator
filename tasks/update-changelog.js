@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var gulp = require('gulp');
-var changelog = require('gulp-conventional-changelog');
-var path = require('path');
-var $ = require('../util.js');
+var gulp = require("gulp");
+var changelog = require("gulp-conventional-changelog");
+var path = require("path");
+var $ = require("../util.js");
 
 module.exports = function () {
-    var src = gulp.src(path.resolve($.conf.appDir, './CHANGELOG.md'), {
+    var src = gulp.src(path.resolve($.conf.appDir, "./CHANGELOG.md"), {
         buffer: false
     });
     return src

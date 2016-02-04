@@ -1,5 +1,5 @@
 # gulp-github-automator
-It's a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
+It"s a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
 
 The principle is simple: Your master branch is always in sync with your production environment, and develop branch is used as base of new features. With this We can automate the changelog file generation and versioning info. New versions of your application are created when needed as well the releases and tags on GitHub repository.
 
@@ -9,9 +9,9 @@ The principle is simple: Your master branch is always in sync with your producti
 In your gulpfile.js:
 ```javascript
 // Load Tasks
-require('gulp-github-automator', {
-    preset: 'angular',
-    testTask: 'test',
+require("gulp-github-automator", {
+    preset: "angular",
+    testTask: "test",
     token: process.env.GITHUB_TOKEN,
 });
 ```
@@ -21,14 +21,14 @@ require('gulp-github-automator', {
 ### Options
 
 #### preset
-Type: `string` Possible values: `'angular', 'atom', 'codemirror', 'ember', 'eslint', 'express', 'jquery', 'jscs', 'jshint'`
+Type: `string` Possible values: `"angular", "atom", "codemirror", "ember", "eslint", "express", "jquery", "jscs", "jshint"`
 
 Is the pattern of the commits messages, with this you can automate the changelog generation and define automatic version detection. The default one is the [angular preset](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#).
 
 #### testTask
 Type: `string` Default: `undefined`
 
-Is the task that you are using to test things before the submission of your code. It's optional, and if not defined the test will be skiped.
+Is the task that you are using to test things before the submission of your code. It"s optional, and if not defined the test will be skiped.
 
 #### token
 Type: `string`
@@ -36,7 +36,7 @@ Type: `string`
 You can get the token in your [settings page in GitHub](https://github.com/settings/tokens/). Security concerns: If you put the token directly in your source code everyone with access to the code will be able to use this token.
 
 #### versionFiles
-Type: `array` Default: `['package.json', 'bower.json']`
+Type: `array` Default: `["package.json", "bower.json"]`
 
 Where github-automator will search for versioning strings for the automatic version bump.
 

@@ -1,33 +1,33 @@
-'use strict';
+"use strict";
 
-var argv = require('yargs').argv;
-var runSequence = require('run-sequence');
-var gutil = require('gulp-util');
-var git = require('gulp-git');
-var $ = require('../utils.js');
+var argv = require("yargs").argv;
+var runSequence = require("run-sequence");
+var gutil = require("gulp-util");
+var git = require("gulp-git");
+var $ = require("../utils.js");
 
 var mergeIntoRelease = function (done) {
   $.mergeInto(argv.r, done);
 };
 
 var mergeIntoMaster = function (done) {
-  $.mergeInto('master', done);
+  $.mergeInto("master", done);
 };
 
 var mergeIntoDevelop = function (done) {
-  $.mergeInto('develop', done);
+  $.mergeInto("develop", done);
 };
 
 var pushToMaster = function (next) {
-  $.askPushTo('master', 'origin', next);
+  $.askPushTo("master", "origin", next);
 };
 
 var pushToRelease = function (next) {
-  $.askPushTo(argv.r, 'origin', next);
+  $.askPushTo(argv.r, "origin", next);
 };
 
 var pushToDevelop = function (next) {
-  $.askPushTo('develop', 'origin', next);
+  $.askPushTo("develop", "origin", next);
 };
 
 var commitChanges = $.commitChangesStream();
@@ -37,15 +37,15 @@ module.exports = [[$.conf.testTask], function (done) {
     if (error) {
       throw error;
     } else {
-      gutil.log('HOTFIX RELEASE FINISHED SUCCESSFULLY');
+      gutil.log("HOTFIX RELEASE FINISHED SUCCESSFULLY");
       $.askDeleteBranch(argv.b, done);
     }
   };
 
   if (argv.r) {
     runSequence(
-      'bump-version',
-      'update-changelog',
+      "bump-version",
+      "update-changelog",
       commitChanges,
       mergeIntoMaster,
       pushToMaster,
@@ -53,21 +53,21 @@ module.exports = [[$.conf.testTask], function (done) {
       pushToRelease,
       mergeIntoDevelop,
       pushToDevelop,
-      'create-new-tag',
-      'github-release',
+      "create-new-tag",
+      "github-release",
       check_error
     );
   } else {
     runSequence(
-      'bump-version',
-      'update-changelog',
+      "bump-version",
+      "update-changelog",
       commitChanges,
       mergeIntoMaster,
       pushToMaster,
       mergeIntoDevelop,
       pushToDevelop,
-      'create-new-tag',
-      'github-release',
+      "create-new-tag",
+      "github-release",
       check_error
     );
   }
