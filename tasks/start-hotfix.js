@@ -5,13 +5,13 @@ var runSequence = require('run-sequence');
 var $ = require('../util.js');
 
 var renameBranch = function (next) {
-  git.branch('release-' + $.packageVersion(), {
+  git.branch('hotfix-' + $.packageVersion(), {
     args: '-m'
   }, next);
 };
 
 var pushToOrigin = function (next) {
-  $.askPushTo('origin', 'release-' + $.packageVersion(), next);
+  $.askPushTo('origin', 'hotfix-' + $.packageVersion(), next);
 };
 
 var commitChanges = $.commitChangesStream();

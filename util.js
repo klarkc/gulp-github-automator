@@ -36,7 +36,7 @@ $.packageVersion = function () {
 };
 
 $.commitChangesStream = function () {
-  return gulp.src('.')
+  return gulp.src($.conf.appDir)
     .pipe(git.add())
     .pipe(git.commit('[Prerelease] Bumped version number'));
 };
@@ -60,8 +60,8 @@ $.calculateVersion = function (done) {
 };
 
 $.askContinue = function (question, keepGoing) {
-  rl.question(question, function (answer) {
-    if (answer.match(/[yes|y]/i)) {
+  rl.question(question + ' (Default to Yes): ', function (answer) {
+    if (!answer.match(/not|no|n/i)) {
       keepGoing();
     }
   });
@@ -78,5 +78,13 @@ $.askDeleteBranch = function (branch, done) {
         args: '--delete'
       }, done);
     });
+  });
+};
+
+$.askPushTo = function (local, remote, done) {
+  $.askContinue('Want to push the local ' + branch + ' branch to ' + remote + ' repository?', function () {
+    git.push(remote, local, {
+      args: '-u'
+    }, done);
   });
 };

@@ -11,7 +11,7 @@ var mergeIntoDevelop = function (next) {
   $.mergeInto('develop', next);
 };
 
-module.exports = [ /*['test'],*/ function (done) {
+module.exports = [ [$.conf.testTask], function (done) {
   runSequence(
     mergeIntoMaster,
     mergeIntoDevelop,
