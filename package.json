@@ -28,6 +28,7 @@
     "gulp-bump": "^1.0.0",
     "gulp-conventional-changelog": "^0.7.0",
     "gulp-git": "^1.7.0",
+    "gulp-load-tasks": "^0.8.4",
     "gulp-util": "^3.0.7",
     "run-sequence": "^1.1.5",
     "yargs": "^3.32.0"
