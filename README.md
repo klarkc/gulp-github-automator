@@ -15,18 +15,20 @@ The principle is simple: Your master branch is always in sync with your producti
 
 ![Git Flow](http://nvie.com/img/git-model@2x.png)
 
+[More details](http://nvie.com/posts/a-successful-git-branching-model/)
+
 ## Usage
 In your gulpfile.js:
 ```javascript
-// Load Tasks
-require("gulp-github-automator", {
+var automatorTasks = require("gulp-github-automator");
+
+// Load tasks
+automatorTasks({
     preset: "angular",
     testTask: "test",
     token: process.env.GITHUB_TOKEN,
 });
 ```
-
-[More details](http://nvie.com/posts/a-successful-git-branching-model/)
 
 ### Options
 
