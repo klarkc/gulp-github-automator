@@ -59,13 +59,18 @@ $.calculateVersion = function (done) {
   }, done);
 };
 
-$.askContinue = function (question, keepGoing) {
+$.askContinue = function (question, keepGoing, must) {
+  must = must || false;
+
   rl.question(question + " (Default to Yes): ", function (answer) {
     if (!answer.match(/not|no|n/i)) {
       keepGoing();
+    } else if(must) {
+      throw new Error("The last question must be answered with a yes YES for this task keeps going");
     }
   });
 };
+
 
 $.askDeleteBranch = function (branch, done) {
   $.askContinue("Want to delete local and remote " + branch + " branch? ", function () {
