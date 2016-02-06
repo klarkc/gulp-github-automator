@@ -4,7 +4,7 @@
   "description": "It's a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.",
   "main": "index.js",
   "scripts": {
-    "tests": "./node_modules/.bin/mocha tests/*.test.js"
+    "test": "./node_modules/.bin/mocha tests/*.test.js"
   },
   "repository": {
     "type": "git",
