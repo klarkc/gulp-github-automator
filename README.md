@@ -1,9 +1,12 @@
 gulp-github-automator
 =
 
+[![Travis][travis-image]][travis-url]
 [![David deps][david-image]][david-url]
 [![Codacy][codacy-image]][codacy-url]
 
+[travis-image]: https://img.shields.io/travis/klarkc/gulp-github-automator/master.svg
+[travis-url]: https://travis-ci.org/klarkc/gulp-github-automator
 [david-image]: https://img.shields.io/david/klarkc/gulp-github-automator.svg
 [david-url]: https://david-dm.org/klarkc/gulp-github-automator
 [codacy-image]: https://img.shields.io/codacy/67950dc659aa4f589efd881190b5a5a0.svg
