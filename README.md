@@ -4,6 +4,7 @@ gulp-github-automator
 [![Travis][travis-image]][travis-url]
 [![David deps][david-image]][david-url]
 [![Codacy][codacy-image]][codacy-url]
+[![Coverage][coverage-image]][coverage-url]
 
 [travis-image]: https://img.shields.io/travis/klarkc/gulp-github-automator/master.svg
 [travis-url]: https://travis-ci.org/klarkc/gulp-github-automator
@@ -11,6 +12,8 @@ gulp-github-automator
 [david-url]: https://david-dm.org/klarkc/gulp-github-automator
 [codacy-image]: https://img.shields.io/codacy/67950dc659aa4f589efd881190b5a5a0.svg
 [codacy-url]: https://www.codacy.com/app/walker/gulp-github-automator
+[coverage-image]: https://api.codacy.com/project/badge/coverage/67950dc659aa4f589efd881190b5a5a0
+[coverage-url]: https://www.codacy.com/app/walker/gulp-github-automator
 
 It"s a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
 
