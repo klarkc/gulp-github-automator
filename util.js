@@ -7,7 +7,7 @@ var argv = require("yargs").argv;
 var rl = require("readline");
 var path = require("path");
 var version = require("conventional-recommended-bump");
-var $ = module.export;
+var $ = module.exports;
 
 $.conf = {
   token: null,
@@ -29,10 +29,11 @@ $.createTmpBranch = function (done) {
   });
 };
 
-$.packageVersion = function () {
+$.packageVersion = function (file) {
   // We parse the json file instead of using require because require caches
   // multiple calls so the version number won"t be updated
-  return JSON.parse(fs.readFileSync(path.resolve($.conf.appDir, "./package.json"), "utf8")).version;
+  file = file || path.resolve($.conf.appDir, "./package.json");
+  return JSON.parse(fs.readFileSync(file, "utf8")).version;
 };
 
 $.commitChangesStream = function () {
