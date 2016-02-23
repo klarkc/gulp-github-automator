@@ -11,6 +11,7 @@ beforeEach(function () {
   mockery.warnOnUnregistered(false);
 
   mockery.registerMock("gulp-git", mocks.git);
+  mockery.registerMock("gulp", mocks.gulp);
 
   mockery.registerAllowable("../util.js");
 });
