@@ -1,22 +1,39 @@
 "use strict";
+var fs = require("fs");
+var resolve = require("path").resolve;
+var rmdir = require("rimraf");
+var git = require("gulp-git");
 
-var mockery = require("mockery");
-var mocks = require("./mocks.js");
+var sandboxDir = process.env.SANDBOX_DIR;
 
-beforeEach(function () {
-  mockery.enable({
-    useCleanCache: true
-  });
+var mochaCwd = process.cwd();
 
-  mockery.warnOnUnregistered(false);
+function writeFiles() {
+  fs.writeFileSync("package.json", "{\n\"version\": \"1.2.3\"\n}");
+}
 
-  mockery.registerMock("gulp-git", mocks.git);
-  mockery.registerMock("gulp", mocks.gulp);
-
-  mockery.registerAllowable("../util.js");
+before(function () {
+  if (!sandboxDir) {
+    sandboxDir = process.env.SANDBOX_DIR = resolve(__dirname, "test_sandbox");
+  }
 });
 
-afterEach(function () {
-  mockery.disable();
-  mockery.deregisterAll();
+beforeEach(function () {
+  fs.mkdirSync(sandboxDir);
+  process.chdir(resolve(sandboxDir));
+  writeFiles();
+  git.init({args: '--quiet'});
+});
+
+afterEach(function (done) {
+  process.chdir(mochaCwd);
+  rmdir(resolve(sandboxDir), done);
+});
+
+after(function(done){
+  if(fs.statSync(resolve(sandboxDir)).isDirectory()) {
+    rmdir(resolve(sandboxDir), done);
+  } else {
+    done();
+  }
 });
