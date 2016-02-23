@@ -38,10 +38,27 @@ describe("util.js", function(){
 
     fakeFS.restore();
   });
-/*
-  it("should commitChangesStream", function(){
+
+  it("should commitChangesStream", function(done){
     var util = require("../util.js");
 
+    var stubs = [];
+    stubs[path.resolve(util.conf.appDir, "stubfile")] = "deleteme";
+
+    fakeFS(stubs);
+    var stream = util.commitChangesStream();
+    var result = "";
+    stream.on("data", function(chunk){
+      result += chunk.toString();
+    });
+    stream.on("error", function(){
+      throw Error("Stream error");
+    });
+    stream.on("finish", function(){
+      console.log(result);
+      done();
+    });
+    fakeFS.restore();
   });
-*/
+
 });
