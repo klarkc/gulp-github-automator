@@ -31,7 +31,7 @@
     "gulp-load-tasks": "^0.8.4",
     "gulp-util": "^3.0.7",
     "run-sequence": "^1.1.5",
-    "yargs": "^3.32.0"
+    "yargs": "^4.2.0"
   },
   "devDependencies": {
     "codacy-coverage": "^1.1.3",
