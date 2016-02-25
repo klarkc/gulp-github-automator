@@ -24,9 +24,9 @@ $.conf = {
 $.createTmpBranch = function (done, opts) {
   var name = "tmp-" + Math.floor(Math.random() * 10000);
   var myOpts = extend({}, opts);
-  myOpts.args += " -b";
-  git.checkout(name, myOpts, function () {
-    done(name);
+  myOpts.args = myOpts.args?myOpts.args+" -b":"-b";
+  git.checkout(name, myOpts, function (err) {
+    done(err, name);
   });
 };
 
