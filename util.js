@@ -8,6 +8,7 @@ var rl = require("readline");
 var path = require("path");
 var version = require("conventional-recommended-bump");
 var $ = module.exports;
+var extend = require("util")._extend;
 
 $.conf = {
   token: null,
@@ -20,12 +21,11 @@ $.conf = {
   ]
 };
 
-$.createTmpBranch = function (done, args) {
+$.createTmpBranch = function (done, opts) {
   var name = "tmp-" + Math.floor(Math.random() * 10000);
-  args = args || "";
-  git.checkout(name, {
-    args: "-b " + args
-  }, function () {
+  var myOpts = extend({}, opts);
+  myOpts.args += " -b";
+  git.checkout(name, myOpts, function () {
     done(name);
   });
 };
@@ -37,24 +37,24 @@ $.packageVersion = function (file) {
   return JSON.parse(fs.readFileSync(file, "utf8")).version;
 };
 
-$.commitChangesStream = function (args) {
-  args = args || "";
+$.commitChangesStream = function (opts) {
+  var myOpts = extend({}, opts);
   return gulp.src($.conf.appDir)
-    .pipe(git.add())
-    .pipe(git.commit("[Prerelease] Bumped version number", {args: args}));
+    .pipe(git.add(myOpts))
+    .pipe(git.commit("[Prerelease] Bumped version number", myOpts));
 };
 
-$.mergeInto = function (branch, done, args) {
-  args = args || "";
+$.mergeInto = function (branch, done, opts) {
+  var myOpts = extend({}, opts);
+  var mergeOpts = extend({}, myOpts);
+  mergeOpts.args += " --no-ff";
   if (!argv.b) {
     throw new Error("You must set a branch with -b argument");
   }
 
   git.checkout(branch, function () {
-    git.merge(argv.b, {
-      args: "--no-ff " + args
-    }, done);
-  }, args);
+    git.merge(argv.b, mergeOpts, done);
+  }, myOpts);
 };
 
 $.calculateVersion = function (done) {
