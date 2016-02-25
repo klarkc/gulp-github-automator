@@ -5,6 +5,7 @@ var rmdir = require("rimraf");
 var mockery = require("mockery");
 var git = require("gulp-git");
 var gulp = require("gulp");
+var runSequence = require("async").series;
 
 var sandboxDir = process.env.SANDBOX_DIR;
 
@@ -16,6 +17,50 @@ var gitOptions = {
 
 function writeFiles() {
   fs.writeFileSync("package.json", "{\n\"version\": \"1.2.3\"\n}");
+}
+
+function prepareGit(done) {
+
+  var initGit = function (next) {
+    git.init(gitOptions, next);
+  };
+
+  var addAndCommit = function (next) {
+    var stream = gulp.src("*")
+      .pipe(git.add(gitOptions))
+      .pipe(git.commit("first commit", gitOptions));
+
+    stream.on('finish', next);
+  };
+
+  var testBranch = function (next) {
+    git.branch('test', gitOptions, next);
+  };
+
+  var configUserMail = function (next) {
+    git.exec({
+      args: "config user.mail 'test@example.com'",
+      quiet: true
+    }, next);
+  };
+
+  var configUserName = function (next) {
+    git.exec({
+      args: "config user.name 'test'",
+      quiet: true
+    }, next);
+  };
+
+  runSequence([
+    initGit,
+    configUserMail,
+    configUserName,
+    addAndCommit,
+    testBranch,
+    function(){
+      done();
+    }
+  ]);
 }
 
 before(function () {
@@ -40,19 +85,7 @@ beforeEach(function (done) {
   fs.mkdirSync(sandboxDir);
   process.chdir(resolve(sandboxDir));
   writeFiles();
-
-  // Init Git
-  git.init(gitOptions, function () {
-    // Add and commit
-    var gitAddCommit = gulp.src("*")
-      .pipe(git.add(gitOptions))
-      .pipe(git.commit("first commit", gitOptions));
-
-    gitAddCommit.on('finish', function(){
-      // Test branch
-      git.branch('test', gitOptions, done);
-    });
-  });
+  prepareGit(done);
 });
 
 afterEach(function (done) {
