@@ -28,7 +28,11 @@ describe("util.js", function () {
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
 
-    util.createTmpBranch(function (name) {
+    util.createTmpBranch(function (err, name) {
+      if(err) {
+        throw err;
+      }
+
       should(name).match(/^tmp\-\d+$/);
       done();
     }, gitOptions);
@@ -95,6 +99,10 @@ describe("util.js", function () {
       });
 
     });
+  });
+
+  it("should calculateVersion", function(done){
+    done();
   });
 
 });
