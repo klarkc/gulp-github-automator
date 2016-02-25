@@ -15,7 +15,7 @@ var gitOptions = {
 describe("util.js", function () {
   it("should have a default conf", function () {
     var util = require("../util.js");
-    util.conf.appDir = process.env.SANDBOX_DIR;
+    util.conf.appDir = global.sandboxDir;
 
     should(util.conf.token).equal(null);
     should(util.conf.preset).equal("angular");
@@ -26,7 +26,7 @@ describe("util.js", function () {
 
   it("should createTmpBranch", function (done) {
     var util = require("../util.js");
-    util.conf.appDir = process.env.SANDBOX_DIR;
+    util.conf.appDir = global.sandboxDir;
 
     util.createTmpBranch(function (err, name) {
       if(err) {
@@ -40,7 +40,7 @@ describe("util.js", function () {
 
   it("should read packageVersion", function () {
     var util = require("../util.js");
-    util.conf.appDir = process.env.SANDBOX_DIR;
+    util.conf.appDir = global.sandboxDir;
 
     should(util.packageVersion('package.json')).match(/^(\d+\.)?\d+.\d+$/);
   });
@@ -53,7 +53,7 @@ describe("util.js", function () {
 
     var stream = util.commitChangesStream(gitOptions);
     stream.on('finish', function () {
-      should(process.env.SANDBOX_DIR).containsGitLog(
+      should(global.sandboxDir).containsGitLog(
         "[Prerelease] Bumped version number",
         done
       );
@@ -62,7 +62,7 @@ describe("util.js", function () {
 
   it("should not mergeInto without -b", function () {
     var util = require("../util.js");
-    util.conf.appDir = process.env.SANDBOX_DIR;
+    util.conf.appDir = global.sandboxDir;
 
     mockery.registerMock('yargs', {
       yargs: {
@@ -75,7 +75,7 @@ describe("util.js", function () {
 
   it("should test branch mergeInto master", function (done) {
     var util = require("../util.js");
-    util.conf.appDir = process.env.SANDBOX_DIR;
+    util.conf.appDir = global.sandboxDir;
 
     git.checkout("test", function () {
       fs.writeFileSync('deleteme.md', 'please, deleteme');
@@ -91,7 +91,7 @@ describe("util.js", function () {
             throw err;
           }
 
-          should(process.env.SANDBOX_DIR).containsGitLog(
+          should(global.sandboxDir).containsGitLog(
             "Testing merge",
             done
           );

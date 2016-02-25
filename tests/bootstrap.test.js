@@ -7,8 +7,6 @@ var git = require("gulp-git");
 var gulp = require("gulp");
 var runSequence = require("async").series;
 
-var sandboxDir = process.env.SANDBOX_DIR;
-
 var mochaCwd = process.cwd();
 
 var gitOptions = {
@@ -56,18 +54,31 @@ function prepareGit(done) {
     configUserMail,
     configUserName,
     addAndCommit,
-    testBranch,
-    function(){
-      done();
+    testBranch
+  ], done);
+}
+
+function createSandboxDir (dir) {
+  var loop = function(count) {
+    // Try to read the directory
+    try {
+      fs.lstatSync(dir + "-" + count);
+      // If no error (so directory exists), keep going and counting
+      loop(++count);
+    } catch(err) {
+      // Path do not exist, we can create him now
+      var newDir = resolve(dir + "-" + count);
+      fs.mkdirSync(newDir);
+      // Update the path of created directory
+      global.sandboxDir = newDir;
     }
-  ]);
+  };
+
+  // Create directory and return the path
+  loop(0);
 }
 
 before(function () {
-  if (!sandboxDir) {
-    sandboxDir = process.env.SANDBOX_DIR = resolve(__dirname, "test_sandbox");
-  }
-
   mockery.enable({
     warnOnUnregistered: false,
     warnOnReplace: false
@@ -82,15 +93,19 @@ before(function () {
 });
 
 beforeEach(function (done) {
-  fs.mkdirSync(sandboxDir);
-  process.chdir(resolve(sandboxDir));
+  global.sandboxDir = resolve(__dirname, process.env.SANDBOX_DIR || "test_sandbox");
+  createSandboxDir(global.sandboxDir);
+
+  process.chdir(global.sandboxDir);
   writeFiles();
   prepareGit(done);
 });
 
 afterEach(function (done) {
   process.chdir(mochaCwd);
-  rmdir(resolve(sandboxDir), done);
+
+  rmdir(global.sandboxDir, done);
+  global.sandboxDir = resolve(__dirname, process.env.SANDBOX_DIR || "test_sandbox");
 });
 
 after(function (done) {
@@ -98,7 +113,7 @@ after(function (done) {
 
   // If something gone wrong we force-removal of the test directory, we don't want this directory messing up future tests.
   try {
-    rmdir(resolve(sandboxDir), done);
+    rmdir(global.sandboxDir, done);
     throw new Error("Test sandbox directory has been forced deleted");
   } catch (err) {
     done();
