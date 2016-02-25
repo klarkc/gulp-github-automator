@@ -52,9 +52,9 @@ $.mergeInto = function (branch, done, opts) {
     throw new Error("You must set a branch with -b argument");
   }
 
-  git.checkout(branch, function () {
+  git.checkout(branch, myOpts, function () {
     git.merge(argv.b, mergeOpts, done);
-  }, myOpts);
+  });
 };
 
 $.calculateVersion = function (done) {
