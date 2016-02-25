@@ -1,8 +1,11 @@
 "use strict";
 
 var should = require("should");
+var assertions = require('./custom-assertions');
+var mockery = require("mockery");
 var path = require("path");
 var git = require("gulp-git");
+var gitOptions = {args: '--quiet', quiet: true};
 
 describe("util.js", function(){
   it("should have a default conf", function(){
@@ -20,12 +23,12 @@ describe("util.js", function(){
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
 
-    git.init({args: '--quiet'});
+    git.init(gitOptions);
 
     util.createTmpBranch(function(name){
       should(name).match(/^tmp\-\d+$/);
       done();
-    });
+    }, gitOptions.args);
   });
 
   it("should read packageVersion", function() {
@@ -41,35 +44,40 @@ describe("util.js", function(){
 
     util.conf.appDir = '*';
 
-    git.init({args: '--quiet'});
+    git.init(gitOptions);
 
-    var stream = util.commitChangesStream();
-
-    stream.on('readable', function(){
-      var file = stream.read();
-      if(file) {
-        should(file.gitAdd).equal(true);
-        should(file.gitCommit).equal("[Prerelease] Bumped version number");
-      }
+    var stream = util.commitChangesStream(gitOptions.args);
+    stream.on('finish', function(){
+      should(process.env.SANDBOX_DIR).containsGitLog(
+        "[Prerelease] Bumped version number",
+        done
+      );
     });
-
-    stream.on('finish', done);
   });
 
   it("should not mergeInto without -b", function(){
+    var mockArgs = {
+      argv: {}
+    };
+
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
 
     should(util.mergeInto).throw(Error);
   });
 
-  it("should mergeInto test", function(){
+  it("should -b test mergeInto master", function(){
+    var mockArgs = {
+      argv: {b: 'test'}
+    };
+
+    mockery.registerMock('yargs', mockArgs);
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
 
     util.mergeInto("test", function(){
 
-    });
+    }, gitOptions.args);
   });
 
 });
