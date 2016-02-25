@@ -44,16 +44,17 @@ $.commitChangesStream = function (args) {
     .pipe(git.commit("[Prerelease] Bumped version number", {args: args}));
 };
 
-$.mergeInto = function (branch, done) {
+$.mergeInto = function (branch, done, args) {
+  args = args || "";
   if (!argv.b) {
     throw new Error("You must set a branch with -b argument");
   }
 
   git.checkout(branch, function () {
     git.merge(argv.b, {
-      args: "--no-ff"
+      args: "--no-ff " + args
     }, done);
-  });
+  }, args);
 };
 
 $.calculateVersion = function (done) {
