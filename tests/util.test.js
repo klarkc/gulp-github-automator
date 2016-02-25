@@ -6,6 +6,7 @@ var mockery = require("mockery");
 var path = require("path");
 var git = require("gulp-git");
 var fs = require("fs");
+var gulp = require("gulp");
 
 var gitOptions = {
   quiet: true
@@ -59,6 +60,12 @@ describe("util.js", function () {
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
 
+    mockery.registerMock('yargs', {
+      yargs: {
+        argv: {}
+      }
+    });
+
     should(util.mergeInto).throw(Error);
   });
 
@@ -66,12 +73,28 @@ describe("util.js", function () {
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
 
-    util.mergeInto("test", function () {
-      should(process.env.SANDBOX_DIR).containsGitLog(
-        "Merged",
-        done
-      );
-    }, gitOptions);
+    git.checkout("test", function () {
+      fs.writeFileSync('deleteme.md', 'please, deleteme');
+      util.conf.appDir = 'deleteme.md';
+
+      var addCommit = gulp.src('deleteme.md')
+        .pipe(git.add(gitOptions))
+        .pipe(git.commit("Testing merge", gitOptions));
+
+      addCommit.on('finish', function () {
+        util.mergeInto("test", function (err) {
+          if (err) {
+            throw err;
+          }
+
+          should(process.env.SANDBOX_DIR).containsGitLog(
+            "Testing merge",
+            done
+          );
+        }, gitOptions);
+      });
+
+    });
   });
 
 });
