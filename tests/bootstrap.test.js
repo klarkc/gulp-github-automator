@@ -24,7 +24,8 @@ before(function () {
   }
 
   mockery.enable({
-    warnOnUnregistered: false
+    warnOnUnregistered: false,
+    warnOnReplace: false
   });
 
   var mockArgs = {
