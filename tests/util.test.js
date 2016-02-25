@@ -52,7 +52,7 @@ describe("util.js", function () {
     util.conf.appDir = 'deleteme.md';
 
     var stream = util.commitChangesStream(gitOptions);
-    stream.on('finish', function () {
+    stream.on('end', function () {
       should(global.sandboxDir).containsGitLog(
         "[Prerelease] Bumped version number",
         done
