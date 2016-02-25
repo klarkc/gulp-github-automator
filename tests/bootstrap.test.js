@@ -55,7 +55,12 @@ function prepareGit(done) {
     configUserName,
     addAndCommit,
     testBranch
-  ], done);
+  ], function(err, result){
+    if(err) {
+      throw err;
+    }
+    done();
+  });
 }
 
 function createSandboxDir (dir) {
@@ -79,6 +84,12 @@ function createSandboxDir (dir) {
 }
 
 before(function () {
+  global.sandboxDir = resolve(__dirname, process.env.SANDBOX_DIR || "test_sandbox");
+  createSandboxDir(global.sandboxDir);
+  process.chdir(global.sandboxDir);
+
+  console.log('Test directory is:', global.sandboxDir);
+
   mockery.enable({
     warnOnUnregistered: false,
     warnOnReplace: false
@@ -93,29 +104,26 @@ before(function () {
 });
 
 beforeEach(function (done) {
-  global.sandboxDir = resolve(__dirname, process.env.SANDBOX_DIR || "test_sandbox");
-  createSandboxDir(global.sandboxDir);
-
-  process.chdir(global.sandboxDir);
   writeFiles();
   prepareGit(done);
 });
 
 afterEach(function (done) {
-  process.chdir(mochaCwd);
-
-  rmdir(global.sandboxDir, done);
-  global.sandboxDir = resolve(__dirname, process.env.SANDBOX_DIR || "test_sandbox");
+  runSequence([
+    function(next){
+      rmdir(resolve(global.sandboxDir, '.git'), next);
+    },
+    function(next){
+      rmdir(resolve(global.sandboxDir, '*'), next);
+    }
+  ], done);
 });
 
 after(function (done) {
   mockery.disable();
 
-  // If something gone wrong we force-removal of the test directory, we don't want this directory messing up future tests.
-  try {
-    rmdir(global.sandboxDir, done);
-    throw new Error("Test sandbox directory has been forced deleted");
-  } catch (err) {
-    done();
-  }
+  process.chdir(mochaCwd);
+
+  rmdir(global.sandboxDir, done);
+  global.sandboxDir = resolve(__dirname, process.env.SANDBOX_DIR || "test_sandbox");
 });
