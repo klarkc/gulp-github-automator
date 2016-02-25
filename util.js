@@ -20,10 +20,11 @@ $.conf = {
   ]
 };
 
-$.createTmpBranch = function (done) {
+$.createTmpBranch = function (done, args) {
   var name = "tmp-" + Math.floor(Math.random() * 10000);
+  args = args || "";
   git.checkout(name, {
-    args: "-b"
+    args: "-b " + args
   }, function () {
     done(name);
   });
@@ -37,12 +38,10 @@ $.packageVersion = function (file) {
 };
 
 $.commitChangesStream = function (args) {
-  if (!args) {
-    args = {};
-  }
+  args = args || "";
   return gulp.src($.conf.appDir)
     .pipe(git.add())
-    .pipe(git.commit("[Prerelease] Bumped version number", args));
+    .pipe(git.commit("[Prerelease] Bumped version number", {args: args}));
 };
 
 $.mergeInto = function (branch, done) {
