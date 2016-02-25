@@ -2,7 +2,6 @@
 var fs = require("fs");
 var resolve = require("path").resolve;
 var rmdir = require("rimraf");
-var git = require("gulp-git");
 
 var sandboxDir = process.env.SANDBOX_DIR;
 
@@ -22,7 +21,6 @@ beforeEach(function () {
   fs.mkdirSync(sandboxDir);
   process.chdir(resolve(sandboxDir));
   writeFiles();
-  git.init({args: '--quiet'});
 });
 
 afterEach(function (done) {

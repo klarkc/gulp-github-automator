@@ -2,7 +2,7 @@
 
 var should = require("should");
 var path = require("path");
-
+var git = require("gulp-git");
 
 describe("util.js", function(){
   it("should have a default conf", function(){
@@ -19,6 +19,8 @@ describe("util.js", function(){
   it("should createTmpBranch", function(done){
     var util = require("../util.js");
     util.conf.appDir = process.env.SANDBOX_DIR;
+
+    git.init({args: '--quiet'});
 
     util.createTmpBranch(function(name){
       should(name).match(/^tmp\-\d+$/);
@@ -38,6 +40,9 @@ describe("util.js", function(){
     util.conf.appDir = process.env.SANDBOX_DIR;
 
     util.conf.appDir = '*';
+
+    git.init({args: '--quiet'});
+
     var stream = util.commitChangesStream();
 
     stream.on('readable', function(){
