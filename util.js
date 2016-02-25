@@ -36,10 +36,13 @@ $.packageVersion = function (file) {
   return JSON.parse(fs.readFileSync(file, "utf8")).version;
 };
 
-$.commitChangesStream = function () {
+$.commitChangesStream = function (args) {
+  if (!args) {
+    args = {};
+  }
   return gulp.src($.conf.appDir)
     .pipe(git.add())
-    .pipe(git.commit("[Prerelease] Bumped version number"));
+    .pipe(git.commit("[Prerelease] Bumped version number", args));
 };
 
 $.mergeInto = function (branch, done) {
