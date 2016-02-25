@@ -23,7 +23,7 @@ $.conf = {
 $.createTmpBranch = function (done) {
   var name = "tmp-" + Math.floor(Math.random() * 10000);
   git.checkout(name, {
-    args: "-b --quiet"
+    args: "-b"
   }, function () {
     done(name);
   });
