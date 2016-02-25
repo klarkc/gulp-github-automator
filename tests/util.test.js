@@ -85,7 +85,7 @@ describe("util.js", function () {
         .pipe(git.add(gitOptions))
         .pipe(git.commit("Testing merge", gitOptions));
 
-      addCommit.on('finish', function () {
+      addCommit.on('end', function () {
         util.mergeInto("test", function (err) {
           if (err) {
             throw err;

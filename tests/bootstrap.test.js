@@ -28,11 +28,11 @@ function prepareGit(done) {
       .pipe(git.add(gitOptions))
       .pipe(git.commit("first commit", gitOptions));
 
-    stream.on('finish', next);
+    stream.on('end', next);
   };
 
   var testBranch = function (next) {
-    git.branch('test', gitOptions, next);
+    git.branch('test', next);
   };
 
   var configUserMail = function (next) {
