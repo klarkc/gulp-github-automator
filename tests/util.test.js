@@ -6,6 +6,7 @@ var mockery = require("mockery");
 var path = require("path");
 var git = require("gulp-git");
 var fs = require("fs");
+var mockery = require("mockery");
 var gulp = require("gulp");
 
 var gitOptions = {
@@ -13,6 +14,16 @@ var gitOptions = {
 };
 
 describe("util.js", function () {
+  beforeEach(function(){
+    mockery.enable({
+      warnOnUnregistered: false
+    });
+  });
+
+  afterEach(function(){
+    mockery.disable();
+  });
+
   it("should have a default conf", function () {
     var util = require("../util.js");
     util.conf.appDir = global.sandboxDir;
@@ -60,49 +71,69 @@ describe("util.js", function () {
     });
   });
 
-  it("should not mergeInto without -b", function () {
-    var util = require("../util.js");
-    util.conf.appDir = global.sandboxDir;
-
-    mockery.registerMock('yargs', {
-      yargs: {
-        argv: {}
-      }
+  describe("calculateVersion", function(){
+    beforeEach(function(){
+      fs.writeFileSync('deleteme.md', 'please, deleteme');
     });
 
-    should(util.mergeInto).throw(Error);
-  });
+    it("should calculate minor", function(done){
+      var util = require("../util.js");
+      var stream = gulp.src('deleteme.md')
+      .pipe(git.add(gitOptions))
+      .pipe(git.commit("feat(docs): New deleteme file", gitOptions));
 
-  it("should test branch mergeInto master", function (done) {
-    var util = require("../util.js");
-    util.conf.appDir = global.sandboxDir;
-
-    git.checkout("test", function () {
-      fs.writeFileSync('deleteme.md', 'please, deleteme');
-      util.conf.appDir = 'deleteme.md';
-
-      var addCommit = gulp.src('deleteme.md')
-        .pipe(git.add(gitOptions))
-        .pipe(git.commit("Testing merge", gitOptions));
-
-      addCommit.on('end', function () {
-        util.mergeInto("test", function (err) {
+      stream.on('end', function(){
+        util.calculateVersion(function(err, release){
           if (err) {
             throw err;
           }
-
-          should(global.sandboxDir).containsGitLog(
-            "Testing merge",
-            done
-          );
-        }, gitOptions);
+          should(release).equal('minor');
+          done();
+        });
       });
+    });
 
+    it("should calculate major", function(done){
+      var util = require("../util.js");
+      var stream = gulp.src('deleteme.md')
+      .pipe(git.add(gitOptions))
+      .pipe(git.commit("feat(docs): New deleteme file\n\nBREAKING CHANGE: New file on repository must be detected by someone else",
+                       gitOptions));
+
+      stream.on('end', function(){
+        util.calculateVersion(function(err, release){
+          if (err) {
+            throw err;
+          }
+          should(release).equal('major');
+          done();
+        });
+      });
     });
   });
 
-  it("should calculateVersion", function(done){
-    done();
+  describe("askContinue", function(){
+    mockery.registerMock("readline", {
+      createInterface: function (obj){
+        return {
+          question: function(text, callback) {
+            return callback("no");
+          }
+        }
+      }
+    });
+    it("should get an error", function(){
+      var util = require("../util.js");
+      (function(){
+        util.askContinue("Want to continue?", function(){}, true);
+      }).should.throw("The last question must be answered with a yes YES for this task keeps going");
+    });
+    it("should continue", function(){
+      var util = require("../util.js");
+      (function(){
+        util.askContinue("Want to continue?");
+      }).should.not.throw();
+    });
   });
 
 });
