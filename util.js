@@ -4,11 +4,16 @@ var gulp = require("gulp");
 var git = require("gulp-git");
 var fs = require("fs");
 var argv = require("yargs").argv;
-var rl = require("readline");
+var readline = require("readline");
 var path = require("path");
 var version = require("conventional-recommended-bump");
 var $ = module.exports;
 var extend = require("util")._extend;
+
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 $.conf = {
   token: null,
@@ -63,10 +68,9 @@ $.calculateVersion = function (done) {
   }, done);
 };
 
-$.askContinue = function (question, keepGoing, must) {
+$.askContinue = function (text, keepGoing, must) {
   must = must || false;
-
-  rl.question(question + " (Default to Yes): ", function (answer) {
+  rl.question(text + " (Default to Yes): ", function (answer) {
     if (!answer.match(/not|no|n/i)) {
       keepGoing();
     } else if(must) {
