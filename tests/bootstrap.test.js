@@ -2,7 +2,6 @@
 var fs = require("fs");
 var resolve = require("path").resolve;
 var rmdir = require("rimraf");
-var mockery = require("mockery");
 var git = require("gulp-git");
 var gulp = require("gulp");
 var runSequence = require("async").series;
@@ -90,17 +89,6 @@ before(function () {
 
   console.log('Test directory is:', global.sandboxDir);
 
-  mockery.enable({
-    warnOnUnregistered: false,
-    warnOnReplace: false
-  });
-
-  var mockArgs = {
-    argv: {
-      b: 'test'
-    }
-  };
-  mockery.registerMock('yargs', mockArgs);
 });
 
 beforeEach(function (done) {
@@ -120,8 +108,6 @@ afterEach(function (done) {
 });
 
 after(function (done) {
-  mockery.disable();
-
   process.chdir(mochaCwd);
 
   rmdir(global.sandboxDir, done);
