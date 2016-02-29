@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/klarkc/gulp-github-automator",
   "dependencies": {
-    "conventional-github-releaser": "^0.5.3",
+    "conventional-github-releaser": "^1.1.1",
     "conventional-recommended-bump": "0.0.3",
     "gulp": "^3.9.0",
     "gulp-bump": "^1.0.0",
