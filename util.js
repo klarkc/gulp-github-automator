@@ -83,11 +83,11 @@ $.askContinue = function (text, keepGoing, must) {
 $.askDeleteBranch = function (branch, done) {
   $.askContinue("Want to delete local and remote " + branch + " branch? ", function () {
     // Delete local release branch
-    git.branch(argv.b, {
+    git.branch(branch, {
       args: "-d"
     }, function () {
       // Delete remote release branch
-      git.push("origin", argv.b, {
+      git.push("origin", branch, {
         args: "--delete"
       }, done);
     });
