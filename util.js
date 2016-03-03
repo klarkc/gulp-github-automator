@@ -53,7 +53,7 @@ $.commitChangesStream = function (opts) {
 $.mergeInto = function (branch, done, opts) {
   var chckOpts = extend({}, opts);
   var mergeOpts = extend({}, opts);
-  mergeOpts.args += mergeOpts.args?mergeOpts.args + " --no-ff":" --no-ff";
+  mergeOpts.args = mergeOpts.args?mergeOpts.args + " --no-ff":" --no-ff";
   if (!argv.b) {
     throw new Error("You must set a branch with -b argument");
   }
