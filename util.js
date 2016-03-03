@@ -51,14 +51,14 @@ $.commitChangesStream = function (opts) {
 };
 
 $.mergeInto = function (branch, done, opts) {
-  var myOpts = extend({}, opts);
-  var mergeOpts = extend({}, myOpts);
-  mergeOpts.args += " --no-ff";
+  var chckOpts = extend({}, opts);
+  var mergeOpts = extend({}, opts);
+  mergeOpts.args += mergeOpts.args?mergeOpts.args + " --no-ff":" --no-ff";
   if (!argv.b) {
     throw new Error("You must set a branch with -b argument");
   }
 
-  git.checkout(branch, myOpts, function () {
+  git.checkout(branch, chckOpts, function () {
     git.merge(argv.b, mergeOpts, done);
   });
 };
