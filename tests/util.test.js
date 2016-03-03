@@ -8,6 +8,7 @@ var git = require("gulp-git");
 var fs = require("fs");
 var mockery = require("mockery");
 var gulp = require("gulp");
+var extend = require("util")._extend;
 
 var gitOptions = {
   quiet: true
@@ -16,7 +17,20 @@ var gitOptions = {
 describe("util.js", function () {
   beforeEach(function(){
     mockery.enable({
-      warnOnUnregistered: false
+      warnOnUnregistered: false,
+      warnOnReplace: false,
+      useCleanCache: true
+    });
+
+    // Default aswers yes for every question
+    mockery.registerMock("readline", {
+      createInterface: function (obj){
+        return {
+          question: function(text, callback) {
+            return callback("yes");
+          }
+        };
+      }
     });
   });
 
@@ -73,6 +87,7 @@ describe("util.js", function () {
 
   describe("calculateVersion", function(){
     beforeEach(function(){
+      mockery.disable(); // We do not want mockery here, cause it generates an error with gulp things
       fs.writeFileSync('deleteme.md', 'please, deleteme');
     });
 
@@ -113,26 +128,71 @@ describe("util.js", function () {
   });
 
   describe("askContinue", function(){
-    mockery.registerMock("readline", {
-      createInterface: function (obj){
-        return {
-          question: function(text, callback) {
-            return callback("no");
-          }
+    it("should continue without must and yes response", function(){
+      var util = require("../util.js");
+      util
+        .askContinue
+        .bind(null, "Want to continue?", function(){}, false)
+        .should.not.throw();
+    });
+    it("should get an error with must and no response", function(){
+      mockery.registerMock("readline", {
+        createInterface: function (obj){
+          return {
+            question: function(text, callback) {
+              return callback("no");
+            }
+          };
         }
-      }
-    });
-    it("should get an error", function(){
+      });
       var util = require("../util.js");
-      (function(){
-        util.askContinue("Want to continue?", function(){}, true);
-      }).should.throw("The last question must be answered with a yes YES for this task keeps going");
+      util
+        .askContinue
+        .bind(null, "Want to continue?", function(){}, true)
+        .should
+        .throw("The last question must be answered with a yes YES for this task keeps going");
     });
-    it("should continue", function(){
+    it("should continue without must and no response", function(){
+      mockery.registerMock("readline", {
+        createInterface: function (obj){
+          return {
+            question: function(text, callback) {
+              return callback("no");
+            }
+          };
+        }
+      });
       var util = require("../util.js");
-      (function(){
-        util.askContinue("Want to continue?");
-      }).should.not.throw();
+      util
+        .askContinue
+        .bind(null, "Want to continue?", function(){}, false)
+        .should.not.throw();
+    });
+  });
+
+  describe("askDeleteBranch", function(){
+    it("should not delete a branch with no response", function(done){
+      mockery.registerMock("readline", {
+        createInterface: function (obj){
+          return {
+            question: function(text, callback) {
+              return callback("no");
+            }
+          };
+        }
+      });
+      var util = require("../util.js");
+      util.askDeleteBranch("test", function(did){
+        did.should.be.false();
+        done();
+      }, gitOptions);
+    });
+    it("should callback with false did when yes response", function(done){
+      var util = require("../util.js");
+      util.askDeleteBranch("test", function(did){
+        did.should.be.false();
+        done();
+      }, gitOptions);
     });
   });
 
