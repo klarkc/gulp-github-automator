@@ -250,4 +250,14 @@ describe("util.js", function () {
     });
   });
 
+  describe("askPushTo", function(){
+    it("should callback with false, with an inexistent remote", function(done){
+      var util = require("../util.js");
+      util.askPushTo("test", "origin", function(did){
+        did.should.be.false();
+        done();
+      }, gitOptions);
+    });
+  });
+
 });
