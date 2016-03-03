@@ -113,13 +113,17 @@ $.askDeleteBranch = function (branch, callback, opts) {
   });
 };
 
-$.askPushTo = function (local, remote, callback) {
+$.askPushTo = function (local, remote, callback, opts) {
+  var pushOpts = extend({}, opts);
+  pushOpts.args = pushOpts.args?pushOpts.args + " -u":"-u";
   $.askContinue("Want to push the local " + local + " branch to " + remote + " repository?", function (did) {
     if (did) {
-      git.push(remote, local, {
-        args: "-u"
-      }, function(){
-        callback(true);
+      git.push(remote, local, pushOpts, function(err){
+        if (err) {
+          callback(false); // I know it's weird but I do not figured out how to test this throw in util.test.js
+        } else {
+          callback(true);
+        }
       });
     } else {
       callback(false);
