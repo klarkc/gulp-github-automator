@@ -246,4 +246,54 @@ describe("util.js", function () {
     });
   });
 
+  describe("mergeInto", function(){
+    var setArgs = function(branch){
+      // Do not working, mock do not being registered
+      mockery.registerMock('yargs', {
+        argv: {b: branch}
+      });
+    };
+
+    beforeEach(function(done){
+      git.checkout("test", gitOptions, function () {
+        fs.writeFileSync('deleteme.md', 'please, deleteme');
+        var addCommit = gulp.src('deleteme.md')
+        .pipe(git.add(gitOptions))
+        .pipe(git.commit("Testing merge", gitOptions));
+
+        addCommit.on('end', function(){
+          git.checkout("master", gitOptions, done);
+        });
+      });
+    });
+    afterEach(function(done){
+      git.checkout("master", gitOptions, done);
+    });
+    it("should not merge without -b", function () {
+      setArgs(null);
+      var util = require("../util.js");
+
+      (function(){
+        util.mergeInto("test", function(){});
+      }).should.throw("You must set a branch with -b argument");
+    });
+
+    it("should merge test branch into master", function (done) {
+      setArgs('test');
+
+      var util = require("../util.js");
+      util.conf.appDir = global.sandboxDir;
+      util.mergeInto("test", function (err) {
+        if (err) {
+          throw err;
+        }
+
+        should(global.sandboxDir).containsGitLog(
+          "Testing merge",
+          done
+        );
+      });
+    });
+  });
+
 });
