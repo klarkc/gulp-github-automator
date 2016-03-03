@@ -14,13 +14,15 @@ var gitOptions = {
   quiet: true
 };
 
+var mockOptions = {
+  warnOnUnregistered: false,
+  warnOnReplace: false,
+  useCleanCache: true
+};
+
 describe("util.js", function () {
   beforeEach(function(){
-    mockery.enable({
-      warnOnUnregistered: false,
-      warnOnReplace: false,
-      useCleanCache: true
-    });
+    mockery.enable(mockOptions);
 
     // Default aswers yes for every question
     mockery.registerMock("readline", {
@@ -87,7 +89,7 @@ describe("util.js", function () {
 
   describe("calculateVersion", function(){
     beforeEach(function(){
-      mockery.disable(); // We do not want mockery here, cause it generates an error with gulp things
+      mockery.disable(); // Gulp do not like mockery :(
       fs.writeFileSync('deleteme.md', 'please, deleteme');
     });
 
@@ -192,6 +194,58 @@ describe("util.js", function () {
       util.askDeleteBranch("test", function(did){
         did.should.be.false();
         done();
+      }, gitOptions);
+    });
+  });
+
+  describe("mergeInto", function(){
+    beforeEach(function(done){
+      mockery.disable(); // As always gulp pipes don't like mockery
+      git.checkout("test", gitOptions, function () {
+        fs.writeFileSync('deleteme.md', 'please, deleteme');
+        var addCommit = gulp.src('deleteme.md')
+        .pipe(git.add(gitOptions))
+        .pipe(git.commit("Testing merge", gitOptions));
+
+
+
+        addCommit.on('end', function(){
+          git.checkout("master", gitOptions, function(){
+            mockery.enable(mockOptions); // Re-enabling
+            done();
+          });
+        });
+      });
+    });
+    afterEach(function(done){
+      git.checkout("master", gitOptions, done);
+    });
+    it("should not merge without -b", function () {
+      mockery.registerMock('yargs', {
+        argv: {}
+      });
+      var util = require("../util.js");
+      util
+        .mergeInto
+        .bind(null, "test", function(){})
+        .should
+        .throw("You must set a branch with -b argument");
+    });
+
+    it("should merge test branch into master", function (done) {
+      mockery.registerMock('yargs', {
+        argv: {b: "test"}
+      });
+      var util = require("../util.js");
+      util.mergeInto("test", function (err) {
+        if (err) {
+          throw err;
+        }
+
+        should(global.sandboxDir).containsGitLog(
+          "Testing merge",
+          done
+        );
       }, gitOptions);
     });
   });
