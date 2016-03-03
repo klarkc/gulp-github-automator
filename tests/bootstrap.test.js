@@ -5,6 +5,7 @@ var rmdir = require("rimraf");
 var git = require("gulp-git");
 var gulp = require("gulp");
 var runSequence = require("async").series;
+var extend = require("util")._extend;
 
 var mochaCwd = process.cwd();
 
@@ -35,17 +36,15 @@ function prepareGit(done) {
   };
 
   var configUserMail = function (next) {
-    git.exec({
-      args: "config user.mail 'test@example.com'",
-      quiet: true
-    }, next);
+    var opts = extend({}, gitOptions);
+    opts.args = "config user.mail 'test@example.com'";
+    git.exec(opts, next);
   };
 
   var configUserName = function (next) {
-    git.exec({
-      args: "config user.name 'test'",
-      quiet: true
-    }, next);
+    var opts = extend({}, gitOptions);
+    opts.args = "config user.name 'test'";
+    git.exec(opts, next);
   };
 
   runSequence([
