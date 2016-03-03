@@ -13,7 +13,9 @@
   "keywords": [
     "gulp",
     "git",
-    "automation"
+    "automation",
+    "semantic release",
+    "semantic versioning"
   ],
   "author": "KlarkC",
   "license": "MIT",
