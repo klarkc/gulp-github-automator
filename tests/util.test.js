@@ -87,6 +87,41 @@ describe("util.js", function () {
     });
   });
 
+  it("should merge function merge objects", function(){
+    var util = require("../util.js"),
+        obj1 = {
+          a: "aa",
+          b: "bb",
+          c: "cc",
+          d: {
+            aa: "aa",
+            bb: "bb",
+          }
+        },
+        obj2 = {
+          c: "ccc",
+          d: {
+            aa: "aaa",
+            cc: "cc"
+          }
+        },
+        expected = JSON.stringify({
+          a: "aa",
+          b: "bb",
+          c: "ccc",
+          d: {
+            aa: "aaa",
+            bb: "bb",
+            cc: "cc"
+          }
+        });
+    JSON
+      .stringify(util.merge(obj1, obj2))
+      .should
+      .be
+      .equal(expected);
+  });
+
   describe("calculateVersion", function(){
     beforeEach(function(){
       mockery.disable(); // Gulp do not like mockery :(
