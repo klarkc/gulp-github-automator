@@ -9,6 +9,7 @@ var path = require("path");
 var version = require("conventional-recommended-bump");
 var $ = module.exports;
 var extend = require("util")._extend;
+var runSequence = require("async").series;
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -68,37 +69,61 @@ $.calculateVersion = function (done) {
   }, done);
 };
 
-$.askContinue = function (text, keepGoing, must) {
+$.askContinue = function (text, callback, must) {
   must = must || false;
   rl.question(text + " (Default to Yes): ", function (answer) {
     if (!answer.match(/not|no|n/i)) {
-      keepGoing();
+      callback(true);
     } else if(must) {
       throw new Error("The last question must be answered with a yes YES for this task keeps going");
+    } else {
+      callback(false);
     }
   });
 };
 
 
-$.askDeleteBranch = function (branch, done) {
-  $.askContinue("Want to delete local and remote " + branch + " branch? ", function () {
-    // Delete local release branch
-    git.branch(branch, {
-      args: "-d"
-    }, function () {
-      // Delete remote release branch
-      git.push("origin", branch, {
-        args: "--delete"
-      }, done);
-    });
+$.askDeleteBranch = function (branch, callback, opts) {
+  var myOpts = extend({}, opts);
+  var pushOpts = extend({}, opts);
+  myOpts.args = myOpts.args?myOpts.args+" -d":"-d";
+  pushOpts.args = pushOpts.args?pushOpts.args+" --delete":"--delete";
+  $.askContinue("Want to delete local and remote " + branch + " branch? ", function (did) {
+    if (did) {
+      runSequence([
+        // Delete local branch
+        function(next){
+          git.branch(branch, myOpts, next);
+        },
+        // Delete remote branch
+        function(next){
+          git.push("origin", branch, pushOpts, next);
+        }
+      ], function(err, result){
+        if(err) {
+          callback(false); // I know it's weird but I do not figured out how to test this throw in util.test.js
+        } else {
+          callback(true);
+        }
+
+      });
+    } else {
+      callback(false);
+    }
   });
 };
 
-$.askPushTo = function (local, remote, done) {
-  $.askContinue("Want to push the local " + local + " branch to " + remote + " repository?", function () {
-    git.push(remote, local, {
-      args: "-u"
-    }, done);
+$.askPushTo = function (local, remote, callback) {
+  $.askContinue("Want to push the local " + local + " branch to " + remote + " repository?", function (did) {
+    if (did) {
+      git.push(remote, local, {
+        args: "-u"
+      }, function(){
+        callback(true);
+      });
+    } else {
+      callback(false);
+    }
   });
 };
 
