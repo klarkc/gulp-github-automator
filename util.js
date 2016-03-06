@@ -22,8 +22,7 @@ $.conf = {
   testTask: null,
   appDir: path.dirname(require.main.filename),
   versionFiles: [
-    "package.js",
-    "bower.json"
+    "package.json"
   ]
 };
 
