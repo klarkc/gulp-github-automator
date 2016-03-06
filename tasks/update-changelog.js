@@ -3,14 +3,16 @@
 var gulp = require("gulp");
 var changelog = require("gulp-conventional-changelog");
 var path = require("path");
+var fs = require("fs");
 var $ = require("../util.js");
 
 module.exports = function () {
   var file = path.resolve($.conf.appDir, "./CHANGELOG.md");
   var src;
 
-  if (path.accessSync(file)) {
+  try {
     // If file exists
+    fs.statSync(file);
     src = gulp.src(file, {
       buffer: false
     });
@@ -19,7 +21,11 @@ module.exports = function () {
         preset: $.conf.preset
       }))
       .pipe(gulp.dest($.conf.appDir));
-  } else {
+  } catch(err) {
+    if(err.code !== "ENOENT") {
+      throw err;
+    }
+
     // If file do not exists
     src = gulp.src(file, {
       buffer: false,
