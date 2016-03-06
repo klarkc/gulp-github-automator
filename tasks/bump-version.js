@@ -21,12 +21,11 @@ module.exports = function (error, bumpType) {
 
     var files = $.conf.versionFiles.reduce(function(files, file){
       var filePath = path.resolve($.conf.appDir, file);
-      if(fs.accessSync(filePath)) {
+      if(fs.statSync(filePath)) {
         files.push(filePath);
       }
       return files;
     }, []);
-
     return gulp.src(files)
       .pipe(bump(bumpParams).on("error", gutil.log))
       .pipe(gulp.dest($.conf.appDir));
