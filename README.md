@@ -22,6 +22,8 @@ gulp-github-automator
 
 It"s a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
 
+*WARNING: STILL NOT READY FOR PRODUCTION USE, WE ARE NOT RESPONSIBLE FOR ANY KIND OF PROBLEMS WITH THE REPOSITORIES*
+
 The principle is simple: Your master branch is always in sync with your production environment, and develop branch is used as base of new features. With this We can automate the changelog file generation and versioning info. New versions of your application are created when needed as well the releases and tags on your GitHub repository.
 
 ![Git Flow](http://nvie.com/img/git-model@2x.png)
