@@ -5,6 +5,7 @@ gulp-github-automator
 [![David deps][david-image]][david-url]
 [![Codacy][codacy-image]][codacy-url]
 [![Coverage][coverage-image]][coverage-url]
+[![Node Version][node-image]][node-url]
 
 [travis-image]: https://img.shields.io/travis/klarkc/gulp-github-automator/master.svg
 [travis-url]: https://travis-ci.org/klarkc/gulp-github-automator
@@ -14,14 +15,21 @@ gulp-github-automator
 [codacy-url]: https://www.codacy.com/app/walker/gulp-github-automator
 [coverage-image]: https://api.codacy.com/project/badge/coverage/67950dc659aa4f589efd881190b5a5a0
 [coverage-url]: https://www.codacy.com/app/walker/gulp-github-automator
+[node-image]: https://img.shields.io/node/v/gh-badges.svg
+[node-url]: http://nodejs.org
+
+[![NPM](https://nodei.co/npm/gulp-github-automator.png)](https://nodei.co/npm/gulp-github-automator/)
 
 It"s a collection of gulp tasks with the objective of simplify the workflow of your application development in your GitHub repository.
 
-The principle is simple: Your master branch is always in sync with your production environment, and develop branch is used as base of new features. With this We can automate the changelog file generation and versioning info. New versions of your application are created when needed as well the releases and tags on GitHub repository.
+*WARNING: STILL NOT READY FOR PRODUCTION USE, WE ARE NOT RESPONSIBLE FOR ANY KIND OF PROBLEMS WITH THE REPOSITORIES*
+
+The principle is simple: Your master branch is always in sync with your production environment, and develop branch is used as base of new features. With this We can automate the changelog file generation and versioning info. New versions of your application are created when needed as well the releases and tags on your GitHub repository.
 
 ![Git Flow](http://nvie.com/img/git-model@2x.png)
 
 [More details](http://nvie.com/posts/a-successful-git-branching-model/)
+[About Semantic Versioning](http://sentimentalversioning.org/)
 
 ## Usage
 In your gulpfile.js:
