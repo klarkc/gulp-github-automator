@@ -27,7 +27,7 @@
     "conventional-github-releaser": "^0.5.3",
     "conventional-recommended-bump": "0.1.2",
     "gulp": "^3.9.0",
-    "gulp-bump": "^1.0.0",
+    "gulp-bump": "^2.1.0",
     "gulp-conventional-changelog": "^1.1.0",
     "gulp-git": "^1.7.0",
     "gulp-load-tasks": "^0.8.4",
