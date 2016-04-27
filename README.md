@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/klarkc/gulp-github-automator.png?label=ready&title=Ready)](https://waffle.io/klarkc/gulp-github-automator)
 gulp-github-automator
 =
 
