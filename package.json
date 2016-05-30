@@ -44,7 +44,7 @@
     "mock-fs": "^3.7.0",
     "mockery": "^1.4.0",
     "rimraf": "^2.5.2",
-    "should": "^8.2.2",
+    "should": "^9.0.0",
     "through2": "^2.0.1",
     "vinyl-fs-mock": "^0.1.2"
   }
